@@ -1,0 +1,174 @@
+.main-grid{
+	overflow-x: auto;
+	overflow-y: hidden;
+	-webkit-transform: translateZ(0);
+	        transform: translateZ(0);
+	border-radius: var(--main-grid-top-border-radius);
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+    // padding-top: 38px;
+    border-bottom-right-radius: 0;
+    // margin-top: 52px;
+    margin-left: 12px;
+    background: #f6f8f9;
+    border-radius: 8px;
+    &-body{
+        height: 100%;
+        // display: flex;
+        flex-direction: column;
+        gap: 1px;
+    }
+    &-row-head{
+        // display: flex;
+    }
+    &-row-body,
+    &-row-head{
+        display: flex;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+        border-bottom: 1px solid #f0f2f5;
+    }
+    &-row-body{
+        // display: grid;
+        .main-grid-cell{
+            transition: all 0.3s ease;
+            flex: 1;
+            display: flex;
+            justify-content: space-between;
+            border-right: 1px solid #f0f2f5;
+            width: 0%;
+            // &:nth-of-type(1){
+            //     width: 7%;
+            //     flex: none;
+            // }
+        }
+        &[name=agreements] .main-grid-cell{
+            &:nth-of-type(1){
+                width: 11%;
+                flex: none;
+            }
+        }
+        &[name=tasks] .main-grid-cell{
+            &:nth-of-type(1){
+                width: 15%;
+                flex: none;
+            }
+        }
+        &[name=projects] .main-grid-cell{
+            &:nth-of-type(1){
+                width: 20%;
+                flex: none;
+            }
+        }
+        &:hover{
+            .main-grid-cell{
+                background: #dbdfe56c;
+            }
+        }
+    }
+    &-cell-head{
+        flex-grow: 1;
+        padding: 16px 0 16px 32px;
+        text-align: left;
+        &[data-field="TITLE"]{
+            text-align: start;
+            padding: 1rem 0 1rem 3rem;
+        }
+        &[data-field="TITLE"]{
+            text-align: start;
+            padding: 1rem 0 1rem 3rem;
+        }
+    }
+    &-cell{
+        &-inner{
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+        }
+        line-height: 24px;
+        &-head.Активность,
+        &.activityDate{
+            background-color: rgba(219,223,229,.4235294118);
+            // background-color: #f6f8f9;
+        }
+        &-task.ui-label-link{
+            color: #fff;
+        } 
+        &-span {
+            display: inline-block;
+            vertical-align: middle;
+            max-width: 155px;
+            height: 30px;
+            line-height: 26px;
+            color: #525C69;
+            padding-left: 11px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-decoration: none;
+            white-space: nowrap;
+            -webkit-user-drag: none;
+        }
+        .creator &-content{
+            position: relative;
+            display: block;
+            /* margin: 5px 0px 5px 5px; */
+            color: #535c69;
+            vertical-align: top;
+            font-size: 14px;
+        }
+        .creator &-task{
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 5px 8px;
+            border-radius: 24.5px;
+            transition: all 0.3s ease;
+            &:hover{
+                background: #C0EDFD;
+            }
+        }
+        &-ava {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+        }
+        &.title{
+            .main-grid-cell-content{
+                padding: 16px 0 16px 42px;
+                text-align: start;
+            }
+            .main-grid-cell-task{
+                color: #525c69;
+                &:hover{
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+    &-cell-content{
+        padding: 16px 0px 16px 32px;
+        display: block;
+    }
+    &-cell-head-container {
+        position: relative;
+        display: block;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        padding: 14px 16px 11px;
+        -webkit-box-flex: 1;
+        -ms-flex-positive: 1;
+        flex-grow: 1;
+        max-width: 100%;
+    }
+    &-loader{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 80vh;
+        &-gif{
+            width: 50px;
+            height: 50px;
+        }
+    }
+    
+}

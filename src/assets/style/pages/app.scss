@@ -1,0 +1,85 @@
+body{
+    &::-webkit-scrollbar {
+        width: 6px;
+        border: none;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: #757575;
+        outline: none;
+    }
+}
+.app{
+    &__panel{
+        // position: sticky;
+        // width: 177px;
+        // box-shadow: 3px 3px 17px 2px #000f1824;
+        height: 100vh;    
+        &-view {
+            width: 160px;
+            height: 100%;
+            margin: auto 0;
+            // border-right: 2px solid #fff;
+        }
+        &-inner {
+            position: fixed;
+            height: 100vh;
+            width: 160px;
+            padding: 0;
+            padding-top: 75px;
+            // padding-right: 2px;
+            // background-color: #d9f4ff;
+            background-color: #f6f8f9;
+            border-radius: 8px;
+        }
+        &-list {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 0;
+            gap: 1px;
+            background: #ffffff;
+            padding-bottom: 1px;
+            // border-top: 1px solid #d9f4ff;
+        }
+        &-item {
+            display: flex;
+            align-items: center;
+            justify-content: start;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+            padding: 10px 0px 10px 0px;
+            & i{
+                background-color: var(--ui-bx-blue);
+            }
+            /* background: #cfd1d5; */
+            /* border-bottom: 2px solid #f0f2f5; */
+            /* border-right: 2px solid #f0f2f5;*/ 
+            // background-color: #d9f4ff;
+            background-color: #f6f8f9;
+            transition: all 0.3s ease;
+            &.active{ 
+                background-color: #a9e2f9;
+            }
+            &:hover {
+                background-color: #dcf5ffb5;
+            }
+        }
+        &-task {
+            padding: 3px 3px 0;
+            & .ui-btn {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                &:after {
+                    left: 50px;
+                }
+            }
+        }
+    }
+    &__workarea {
+        width: 100%;
+    }
+}

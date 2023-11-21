@@ -1,0 +1,41 @@
+@import "root.scss";
+
+
+@import "https://dev.1c-bitrix.ru/bitrix/js/ui/icons/disk/ui.icons.disk.min.css?16751826071722"; // ui.icons.base
+@import "https://dev.1c-bitrix.ru/bitrix/js/ui/buttons/icons/ui.buttons.icons.min.css?16751826071722"; // ui.icons.base
+@import "https://dev.1c-bitrix.ru/bitrix/js/ui/icons/service/ui.icons.service.min.css?16751826071722"; // ui.icons.base
+@import "https://dev.1c-bitrix.ru/bitrix/js/ui/icons/b24/ui.icons.b24.css?16751826071722"; // ui.icons.base
+@import "https://dev.1c-bitrix.ru/bitrix/js/ui/icons/base/ui.icons.base.css?16751826071722"; // ui.icons.base
+@import "https://dev.1c-bitrix.ru/bitrix/js/ui/label/src/ui.label.css?16751826071722"; // ui.label
+// @import "https://micros.bitrix24.ru/bitrix/js/ui/ui-label/ui.layout.form.min.css?16751826071722"; // ui.layout.form
+@import "https://micros.bitrix24.ru/bitrix/js/ui/forms/ui.forms.min.css?16751826071722"; // ui.forms
+@import "https://micros.bitrix24.ru/bitrix/js/ui/buttons/ui.buttons.min.css?16751826071722"; // ui.buttons
+@import "https://micros.bitrix24.ru/bitrix/js/ui/alerts/ui.alerts.min.css?16751826071722"; // ui.buttons
+
+@import "pages/app.scss";
+@import "pages/grid.scss";
+@import "pages/item.scss";
+@import "pages/modal.scss";
+
+@import "grid.scss";
+@import "common.scss";
+
+
+#app {
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+    display: flex;
+    // gap: 1rem;
+  }
+
+  nav {
+    padding: 30px;
+
+  }
+  a {
+    text-decoration: none; 
+    color: inherit;
+  }

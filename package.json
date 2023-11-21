@@ -1,0 +1,29 @@
+{
+  "name": "micros.support",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@vuepic/vue-datepicker": "^7.2.2",
+    "axios": "^1.5.1",
+    "core-js": "^3.8.3",
+    "cors": "^2.8.5",
+    "nbbcjs": "^1.1.2",
+    "pug": "^3.0.2",
+    "vue": "^3.3.4",
+    "vue-router": "^4.0.3",
+    "vuex": "^4.0.0",
+    "watch": "^0.13.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.2.3",
+    "sass": "^1.32.7",
+    "sass-loader": "^12.0.0",
+    "vite": "^4.4.5"
+  }
+}
