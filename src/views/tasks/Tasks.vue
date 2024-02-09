@@ -98,7 +98,6 @@ export default {
             ],
           };
           this.tasksList = JSON.parse(await sendRequest(newValue.portal_url,"tasks.task.list",paramsTasks,newValue.access_token)).result.tasks;
-          console.log(this.tasksList);
 
           console.timeEnd("Время выполнения скрипта");
         }

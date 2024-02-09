@@ -12,9 +12,10 @@ div.main-grid-body
                       span.ui-icon.ui-icon-common-user.app-icon-sm(v-else) 
                         i
                       span.main-grid-cell-span {{ taskItem.value.name}}
+                    a.main-grid-cell-task.ui-label.ui-label-default.ui-label-fill.ui-label-link(
+                      v-else-if="(taskItem.name==='deadline' || taskItem.name==='createdDate')" ) {{ taskItem.value.name?taskItem.value.name:taskItem.value}}
                     a.main-grid-cell-task(
-                      v-else
-                      :class="{'ui-label ui-label-default ui-label-fill ui-label-link':taskItem.name==='deadline'}") {{ taskItem.value.name?taskItem.value.name:taskItem.value}}
+                      v-else) {{ taskItem.value.name?taskItem.value.name:taskItem.value}}
     div.main-grid-loader(v-if="loader")
       img.main-grid-loader-gif(alt="loader.gif" src="@/assets/img/elems/loader.gif")
 </template>
@@ -64,7 +65,7 @@ div.main-grid-body
         handler(newValue, oldValue) {
           if(Object.keys(newValue).length>0){
             // let requiredKeys = ["id","title","activityDate","deadline","createdBy","responsibleId","description","createdDate","groupId"];
-            let requiredKeys = ["title","activityDate","deadline","creator","responsible","group"];
+            let requiredKeys = ["title","createdDate","deadline","creator","responsible","group"];
             var transformedArray = [];
             function formatDate(dateString) {
               const options = {
@@ -81,8 +82,7 @@ div.main-grid-body
             for(let j = 0;j<this.tasksObj.length;j++){
               let i = 0;
               transformedArray.push(requiredKeys.map(key => { i++;
-                if(key=="activityDate"){
-                  
+                if(key=="createdDate"){
                   this.tasksObj[j][key] = this.tasksObj[j][key]==null?"Без срока":formatDate(this.tasksObj[j][key]);
                   return ({ id: i, name:key, value: this.tasksObj[j][key] })
                 }else if(key=="deadline"){

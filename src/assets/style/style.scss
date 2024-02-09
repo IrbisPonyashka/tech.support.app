@@ -1,6 +1,6 @@
 @import "root.scss";
 
-
+@import 'animate.css';
 @import "https://dev.1c-bitrix.ru/bitrix/js/ui/icons/disk/ui.icons.disk.min.css?16751826071722"; // ui.icons.base
 @import "https://dev.1c-bitrix.ru/bitrix/js/ui/buttons/icons/ui.buttons.icons.min.css?16751826071722"; // ui.icons.base
 @import "https://dev.1c-bitrix.ru/bitrix/js/ui/icons/service/ui.icons.service.min.css?16751826071722"; // ui.icons.base
@@ -16,6 +16,8 @@
 @import "pages/grid.scss";
 @import "pages/item.scss";
 @import "pages/modal.scss";
+
+@import "components/comments.scss";
 
 @import "grid.scss";
 @import "common.scss";

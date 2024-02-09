@@ -17,10 +17,10 @@ export default createStore({
   actions: {
     async getTokens({commit}){
       if(import.meta.env.MODE=="development"){
-        let refreshToken = "5fcd6a650067361d0004ce04000021e0000007333580b36e20d3f0dfa99854217355ce",
+        let refreshToken = "43de85650068ca490004ce04000021e0000007249027b562081e03c3903a82fc71c5df",
           portal_url = "cp.micros.uz",
-          client_id = "local.65142df8e8d666.01765156",
-          client_secret = "l37e9E8Ji4C0isz14qafXuvD8KTNo0WCSKyBVcCfsmJX0X5OPa";
+          client_id = "local.655e3c8e4e20d6.38542819",
+          client_secret = "l5JkyaghQalIx1rf0jULA316kt5HaZ6vzBBSKvzMp8w6JVufPN";
 
         var requestOptions = {
           method: 'POST',
@@ -28,7 +28,7 @@ export default createStore({
           'x-target': 'https://micros.uz'
         };
         
-        let url = process.env.NODE_ENV=="production"?"https://micros.uz":"/proxy";
+        let url = import.meta.env.NODE_ENV=="production"?"https://micros.uz":"/proxy";
         await fetch(`${url}/it/solutions_our/micros.tech.support/ajax.php?grant_type=refresh_token&client_id=${client_id}&client_secret=${client_secret}&refresh_token=${refreshToken}`, requestOptions)
           .then(response => response.json())
           .then(result => {
@@ -55,7 +55,7 @@ export default createStore({
           
           BX24.callMethod("app.option.get", {}, async (result) => {
             // sessionStorage.tokens = JSON.stringify(result.data());
-            let url = process.env.NODE_ENV=="production"?"https://micros.uz":"/proxy",
+            let url = import.meta.env.NODE_ENV=="production"?"https://micros.uz":"/proxy",
             authTokens = result.data().tokens,
               refreshToken = authTokens.refresh_token,
               client_id = authTokens.client_id,

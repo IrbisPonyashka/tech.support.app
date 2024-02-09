@@ -41,28 +41,14 @@ transition(name="sidebar")
                                 div.ui-icon(:class="`ui-icon-file-${file.NAME}`") 
                                   i
                             div.field__file-files_name {{file.NAME}}
-          div.task-detail__comments
-            div.task-detail__comments-items(v-if="taskComments" v-for="comment in taskComments")
-              div.task-detail__comments-box
-                img.task-detail__comments-logo(v-if="comment.AUTHOR_PHOTO" :src="comment.AUTHOR_PHOTO" :alt="comment.AUTHOR_PHOTO")
-                span.ui-icon.ui-icon-common-user.app-icon-md(v-else)
-                  i
-                div.task-detail__comments-item
-                  div.task-detail__item
-                    span.task-detail__item-author-name(:name="comment.AUTHOR_NAME")
-                    div.task-detail__item-info
-                      span.item-user(target="_top" id="59433" :bx-user-id="comment.id") {{comment.AUTHOR_NAME}}
-                      span.item-time {{formatDate(comment.POST_DATE)}}
-                    div.task-detail__item-text
-                      div.task-detail__item-text-inner
-                        div(v-html="comment.POST_MESSAGE_HTML") 
-            div.task-detail__comments-add
-              div.task-detail__comments-box
-                div.ui-ctl.ui-ctl-textarea.ui-ctl-round
-                  textarea.ui-ctl-element.task-detail__comments-field(placeholder="Оставить комментарий" v-model="commentText")
-              div.task-detail__comments-send(@click="sendComment(commentText)")
-                div.ui-btn.ui-btn-sm.ui-btn-primary
-                  button.ui-btn-main Отправить
+          //- Комментарии - start
+          Comments(
+            v-if="taskComments"
+            :options="getAppTokens" 
+            :comments="taskComments" 
+            :formatDate="formatDate"
+            )
+          //- end 
         div.task__detail-info_panel.element__panel-content
           div.element__panel-wrapper
             div.element__panel-header
@@ -80,9 +66,11 @@ transition(name="sidebar")
                   span.element__panel-status Постановщик:
                   div.element__panel-status-value 
                     div.element__panel-logo
-                      img.element__panel-img(:src="`https://${getAppTokens.portal_url}`+taskObject.creator.icon" :alt="taskObject.creator.id" v-if="taskObject.creator.icon")
-                      span.ui-icon.ui-icon-common-user.app-icon-md(v-else)
-                        i
+                      img.element__panel-img(
+                        @error="fileExists"
+                        :src="`https://${getAppTokens.portal_url}`+taskObject.creator.icon" :alt="taskObject.creator.id")
+                      //- span.ui-icon.ui-icon-common-user.app-icon-md(v-else)
+                      //-   i
                     div.element__panel-text
                       span.element__panel-status-name {{taskObject.creator.name}}
                       span.element__panel-status-work {{taskObject.creator.workPosition}}
@@ -90,9 +78,11 @@ transition(name="sidebar")
                   span.element__panel-status Исполнитель:
                   div.element__panel-status-value 
                     div.element__panel-logo
-                      img.element__panel-img(v-if="taskObject.responsible.icon" :src="`https://${getAppTokens.portal_url}`+taskObject.responsible.icon" :alt="taskObject.responsible.id")
-                      span.ui-icon.ui-icon-common-user.app-icon-md(v-else)
-                        i
+                      img.element__panel-img(
+                        @error="fileExists"
+                        :src="`https://${getAppTokens.portal_url}`+taskObject.responsible.icon" :alt="taskObject.responsible.id")
+                      //- span.ui-icon.ui-icon-common-user.app-icon-md(v-else)
+                      //-   i
                     div.element__panel-text
                       span.element__panel-status-name {{taskObject.responsible.name}}
                       span.element__panel-status-work {{taskObject.responsible.workPosition}}
@@ -101,9 +91,11 @@ transition(name="sidebar")
                   //- div.element__panel-status-value {{taskObject.accomplicesData[Object.keys(taskObject.accomplicesData)]}}
                   div.element__panel-status-value(v-for="accomplice in taskObject.accomplicesData")
                     div.element__panel-logo
-                      img.element__panel-img(v-if="checkImageSrc(accomplice.icon)" :src="`https://${getAppTokens.portal_url}`+accomplice.icon" :alt="accomplice.id")
-                      span.ui-icon.ui-icon-common-user.app-icon-md(v-else)
-                        i
+                      img.element__panel-img(
+                        @error="fileExists"
+                        :src="`https://${getAppTokens.portal_url}`+accomplice.icon" :alt="accomplice.id")
+                      //- span.ui-icon.ui-icon-common-user.app-icon-md(v-else)
+                      //-   i
                     div.element__panel-text
                       span.element__panel-status-name {{accomplice.name}}
                       span.element__panel-status-work {{accomplice.workPosition}}
@@ -111,15 +103,18 @@ transition(name="sidebar")
                   span.element__panel-status Наблюдатели:
                   div.element__panel-status-value(v-for="auditor in taskObject.auditorsData")
                     div.element__panel-logo
-                      img.element__panel-img(v-if="checkImageSrc(auditor.icon)" :src="`https://${getAppTokens.portal_url}`+auditor.icon" :alt="auditor.id")
-                      span.ui-icon.ui-icon-common-user.app-icon-md(v-else)
-                        i
+                      img.element__panel-img(
+                        @error="fileExists"
+                        :src="`https://${getAppTokens.portal_url}`+auditor.icon" :alt="auditor.id")
+                      //- span.ui-icon.ui-icon-common-user.app-icon-md(v-else)
+                      //-   i
                     div.element__panel-text
                       span.element__panel-status-name {{auditor.name}}
                       span.element__panel-status-work {{auditor.workPosition}}
 </template>
 
 <script>
+  import Comments from "@/components/elements/Comments.vue";
 
   import BBCode from 'nbbcjs';
   const bbcode = new BBCode();
@@ -133,9 +128,11 @@ transition(name="sidebar")
           taskObject:null,
           taskComments:null,
           showModal: false,
-          commentText:"",
           body:document.querySelector("body")
         }
+      },
+      components: {
+        Comments,
       },
       methods: {
         close(e) {
@@ -177,28 +174,21 @@ transition(name="sidebar")
 
           return `${formattedDate} ${formattedTime}`;
         },
-        async sendComment(text){
-          let profile = JSON.parse(await sendRequest(JSON.parse(sessionStorage.tokens).portal_url, "profile", {}, JSON.parse(sessionStorage.tokens).access_token)).result;
-          let params = [ this.taskObject.id,
-            {
-              "AUTHOR_ID":profile.ID,
-              'POST_MESSAGE': text
+        async getComments(token) {
+          try {
+            // console.log(this.$route.params.id);
+            let params = {"taskId": this.$route.params.id};
+            let taskCommentsar = JSON.parse(await sendRequest(token.portal_url, "task.commentitem.getlist", params, token.access_token)).result;
+            for(let profile of taskCommentsar){
+              let user = JSON.parse(await sendRequest(token.portal_url, "user.get", {id:profile.AUTHOR_ID}, token.access_token)).result[0];
+              if(user.PERSONAL_PHOTO){
+                profile.AUTHOR_PHOTO = user.PERSONAL_PHOTO;
+              }
             }
-          ]
-          let commentAdd =  JSON.parse(await sendRequest(JSON.parse(sessionStorage.tokens).portal_url, "task.commentitem.add", params, JSON.parse(sessionStorage.tokens).access_token)).result;
-          if(commentAdd){
-            let commentAddedGet = JSON.parse(await sendRequest(JSON.parse(sessionStorage.tokens).portal_url, "task.commentitem.get", [this.$route.params.id,commentAdd], JSON.parse(sessionStorage.tokens).access_token)).result; 
-            let user = JSON.parse(await sendRequest(JSON.parse(sessionStorage.tokens).portal_url, "user.get", {id:commentAddedGet.AUTHOR_ID}, JSON.parse(sessionStorage.tokens).access_token)).result[0];
-            if(user.PERSONAL_PHOTO){
-              commentAddedGet.AUTHOR_PHOTO = user.PERSONAL_PHOTO;
-            }
-            this.taskComments.push(commentAddedGet);
-            this.commentText="";
-
-            // console.log(commentAddedGet);
-            // console.log(this.taskComments);
+            this.taskComments = taskCommentsar;  
+          } catch (error) {
+            console.error("Ошибка при получении данных: ", error);
           }
-
         },
         async setPriority(priorityVal){
           let value = (priorityVal==1||priorityVal==0)?2:1;
@@ -241,16 +231,23 @@ transition(name="sidebar")
             taskObj.status = this.getTaskStatus(taskObj.status);
             let taskFiles = JSON.parse(await sendRequest(token.portal_url, "task.item.getfiles", {"TASKID":this.$route.params.id}, token.access_token)).result;
             taskObj.files = taskFiles;
-            if(taskObj.creator.icon){
-              console.log(taskObj.creator.icon);
-              taskObj.responsible.icon = false;
-            }
-            if(taskObj.responsible.icon){
-              taskObj.responsible.icon = false;
-            }else{
-              console.log(taskObj.responsible.icon);
-            }
-            console.log(taskObj);
+            [taskObj.creator,taskObj.responsible].forEach(el => {
+              const img = new Image();
+              img.src = "https://"+token.portal_url+el.icon;
+              img.onload = () => true; // Изображение успешно загружено
+              img.onerror = () => el.icon = false; // Ошибка загрузки изображения
+            })
+              console.log(taskObj);//accomplice
+            // if(taskObj.creator.icon){
+            //   console.log(taskObj.creator.icon);
+            //   taskObj.responsible.icon = false;
+            // }
+            // if(taskObj.responsible.icon){
+            //   taskObj.responsible.icon = false;
+            // }else{
+            //   console.log(taskObj.responsible.icon);
+            // }
+            // console.log(taskObj);
             
             this.taskObject = taskObj; 
             this.body.style.overflow=!this.showModal?"hidden":"auto";
@@ -260,38 +257,25 @@ transition(name="sidebar")
             console.error("Ошибка при получении данных: ", error);
           }
         },
-        async getComments(token) {
-          try {
-            // console.log(this.$route.params.id);
-            let params = {"taskId": this.$route.params.id};
-            let taskCommentsar = JSON.parse(await sendRequest(token.portal_url, "task.commentitem.getlist", params, token.access_token)).result;
-            for(let profile of taskCommentsar){
-              let user = JSON.parse(await sendRequest(token.portal_url, "user.get", {id:profile.AUTHOR_ID}, token.access_token)).result[0];
-              if(user.PERSONAL_PHOTO){
-                profile.AUTHOR_PHOTO = user.PERSONAL_PHOTO;
-              }
-            }
-            this.taskComments = taskCommentsar;  
-          } catch (error) {
-            console.error("Ошибка при получении данных: ", error);
-          }
+        async fileExists(e){
+          let span = document.createElement("span");
+          span.className="ui-icon ui-icon-common-user app-icon-md";
+          span.appendChild(document.createElement("i"));
+          e.target.replaceWith(span);
+          // console.log(url);
         },
-        checkImageSrc(src){
-          this.fileExists(src);
-          // console.log(src);
-          // if(src){
+        test(url) {
+            return new Promise((resolve) => {
+            });
+          // image.onerror = function() {
+          //   // Изображение не загружено
+          //   console.log(image,false);
           //   return false;
-          // }else{
-          //   return true;
-          // }
-        },
-        fileExists(url) {
-          return new Promise((resolve) => {
-            const img = new Image();
-            img.onload = () => resolve(true);
-            img.onerror = () => resolve(false);
-            img.src = url;
-          });
+          // };
+          // return new Promise(async (resolve) => {
+            // const response = await fetch("/check-image/" + url);
+            // response.ok ? true  :  obj.icon = false; 
+          // });
         }
       },
       computed: {

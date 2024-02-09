@@ -6,6 +6,7 @@ div.app__workarea
 </template>
 
 <script>
+
 import Panel from "@/components/Panel.vue";
 export default {
   name: 'App',

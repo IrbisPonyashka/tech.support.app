@@ -24,6 +24,13 @@ export default defineConfig({
           return path.replace(/^\/proxy\//, '/'); // Удаляем "/proxy/" из пути
         }
       },
+      '/check-image': {
+        target: 'https://cp.micros.uz',
+        changeOrigin: true,
+        rewrite: function (path, req) {
+          return path.replace(/^\/check-image\//, '/'); // Удаляем "/proxy/" из пути
+        }
+      },
     },
   },
 })

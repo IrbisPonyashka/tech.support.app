@@ -83,26 +83,20 @@ div.main-grid-body
     computed: {
     },
     created() {
-      // console.log(this.projectsArray);
-      // for(let index in this.projectsArray[0]){
-      //   let i=0;
-      //   this.arrObjects.push(this.projectsArray[1].map(key => { i++;
-      //     // console.log(newValue[0][index][key.title]);
-      //     return ({ id: i, name:key, value: this.projectsArray[0][index][key.title] })
-      //   }));
-      // }
     },
     watch: {
       agreementsArr:{
         immediate: true,
         async handler(newValue, oldValue) {
+          console.log(newValue);
           // console.log(.length);
           // Object.keys(newValue).length
           if(Object.keys(newValue[0]).length>0){
+            var transformedArray = [];
             for(let index in newValue[0]){
               let i=0;
               // console.log(index);
-              this.arrObjects.push(newValue[1].map(key => { i++;
+              transformedArray.push(newValue[1].map(key => { i++;
                 let idiotKey = Object.keys(newValue[0][index][key.title]);
                 if(typeof newValue[0][index][key.title]=="object"){
                   if(key.title=="PROPERTY_3213"){ // файл
@@ -119,6 +113,11 @@ div.main-grid-body
                 }
               }));
             }
+              this.arrObjects = transformedArray;
+              this.loader = false;
+
+          }else if(Object.keys(newValue).length==0){
+            this.loader = true;
           }
 
         }

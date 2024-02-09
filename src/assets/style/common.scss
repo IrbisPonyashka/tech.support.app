@@ -42,3 +42,33 @@ button{
 .app-icon-sm {
     --ui-icon-size: var(--ui-icon-size-sm);
 }
+
+
+.toolbar-button[data-id]  {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    margin: 0 29px 0 0;
+    height: 27px;
+    font: 13px/20px var(--ui-font-family-primary, var(--ui-font-family-helvetica));
+    color: #515E68;
+    text-align: left;
+    transition: opacity .3s;
+    opacity: .5;
+    user-select: none;
+    cursor: pointer;
+
+}
+.toolbar-button[data-id] i {
+    transition: opacity .2s linear;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    margin-right: 3px;
+    /* margin-top: 13px; */
+    height: 20px;
+    opacity: 0.5;
+    width: 20px;
+    float: left;
+    position: relative;
+}

@@ -3,7 +3,6 @@ export default function initBX24() {
       const script = document.createElement('script');
       script.src = '//api.bitrix24.com/api/v1/';
       script.onload = () => {
-        BX24.resizeWindow(document.body.clientWidth, document.querySelector("#app").clientHeight);
         BX24.callMethod("app.option.get", {}, (result) => {
           if (result.error()) {
             console.log("error");

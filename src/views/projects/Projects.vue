@@ -68,8 +68,7 @@ export default {
         if (newValue.access_token) {
           console.time("Время выполнения скрипта"); //
 
-          // this.projectsFields = JSON.parse(await sendRequest("cp.micros.uz","socialnetwork.api.workgroup.get",paramsProject,newValue.access_token)).result;
-          this.projectsFields = JSON.parse(await sendRequest(newObject.portal_url,"sonet_group.get",paramsProject,newValue.access_token)).result;
+          this.projectsFields = JSON.parse(await sendRequest(newValue.portal_url,"sonet_group.get",paramsProject,newValue.access_token)).result;
         
           console.timeEnd("Время выполнения скрипта"); //
         }

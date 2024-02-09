@@ -57,7 +57,7 @@ export default {
   },
   methods: {
     close(e) {
-      e.prevent;
+      e.preventDefault();
       this.body.style.overflow=!this.showModal?"hidden":"auto";
       this.showModal = !this.showModal;
     },
@@ -107,7 +107,7 @@ export default {
           let seletcName = [
             "ID","NAME","Дата договора","Стоимость","НДС 12%","Стоимость с учетом НДС","Срок действия с","Срок действия по","Файл","Ссылка надоговор","Заказчик"
           ];
-          console.log(newValue);
+          // console.log(newValue);
           this.agreements = JSON.parse(await sendRequest(newValue.portal_url,"lists.element.get",params,newValue.access_token)).result; // элементы инфоблока "список"
 
           /* фильтруем список полей 

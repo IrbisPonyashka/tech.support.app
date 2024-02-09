@@ -39,11 +39,13 @@ div.taskpanel-content_workarea(:key="componentKey")
           div.field__dropdown-inner
             div.field__dropdown-name Проект
             div.field__dropdown-dropbox
-              div.field__dropdown-value(@click="showDropDownList"  ref="dropdown")
+              div.field__dropdown-value(@click="showDropDownList" ref="dropdown")
                 input.ui-ctl-element.field__dropdown-search(v-model="fields.projectName" @input="searchProjects" name="GROUP_NAME") 
                 div.ui-ctl-after.ui-ctl-icon-angle(:class="{'active':dropdownShow}")
                 input(type="hidden" name="GROUP_ID" v-model="fields.projectId" )
               transition(name="dropdown")
+                //- select.field__dropdown-list
+                //-   option.field__dropdown-element(v-for="project of projects" :data-value="project.ID" @click="selectProject(project)") {{project.NAME}}
                 div.field__dropdown-list(v-if="dropdownShow")
                   div.field__dropdown-element(v-for="project of projects" :data-value="project.ID" @click="selectProject(project)") {{project.NAME}}
       div.taskpanel-task_footer
@@ -54,7 +56,6 @@ div.taskpanel-content_workarea(:key="componentKey")
 </template>
 
 <script>
-
   import {mapActions, mapGetters} from "vuex"
   import { ref, onMounted, onUnmounted } from 'vue'
   import VueDatePicker from '@vuepic/vue-datepicker';
@@ -107,7 +108,6 @@ div.taskpanel-content_workarea(:key="componentKey")
     },
     methods: {
         checkFields(){
-          console.log(this.fields);
           if(this.fields.title=="" && this.fields.description=="" && this.fields.projectId==""){
             this.errorMessage = "Не указаны название, описания и проект задачи"
             this.showError=true;
@@ -158,8 +158,10 @@ div.taskpanel-content_workarea(:key="componentKey")
             
             this.loading = true;
             let batchPrarams = {
-              "halt":1,"cmd": {
-                "atask_add":`tasks.task.add?fields[TITLE]=${this.fields.title}&fields[DESCRIPTION]=${this.fields.description}&fields[PRIORITY]=${this.fields.important}&fields[RESPONSIBLE_ID]=${8262}&fields[GROUP_ID]=${this.fields.projectId}`
+              "halt":1,
+              "cmd": {
+                "currUser" : `profile`,
+                "atask_add":`tasks.task.add?fields[TITLE]=${this.fields.title}&fields[DESCRIPTION]=${this.fields.description}&fields[PRIORITY]=${this.fields.important}&fields[RESPONSIBLE_ID]=$result[currUser][ID]&fields[GROUP_ID]=${this.fields.projectId}`
               }
             };
             for(let file in this.fields.files){
@@ -167,10 +169,13 @@ div.taskpanel-content_workarea(:key="componentKey")
               batchPrarams.cmd[`fileAdd_${Number(file)+1}`] = `task.item.addfile?TASK_ID=$result[atask_add][task][id]&FILE[NAME]=${this.fields.files[file].name}&FILE[CONTENT]=${this.fields.files[file].base64}`;
             }
             if(batchPrarams){
-              console.log(batchPrarams);
-              var taskAddBatch = await sendRequest(this.auth.portal_url,"batch",batchPrarams,this.auth.access_token);
-              if(taskAddBatch){
-                console.log(JSON.parse(taskAddBatch));
+              var taskAddBatchJson = await sendRequest(this.auth.portal_url,"batch",batchPrarams,this.auth.access_token);
+              var taskAddBatch = JSON.parse(taskAddBatchJson);
+              if(taskAddBatch.result.result_error.length){
+                this.loading = false; 
+                this.showError = true;
+                this.errorMessage = taskAddBatch.result.result_error.atask_add.error_description;
+              }else if(taskAddBatch){
                 this.loading = false;
                 this.$router.go(0);
                 location.reload();
@@ -224,7 +229,6 @@ div.taskpanel-content_workarea(:key="componentKey")
             file.id = this.generateUniqueId();
             this.fields.files.push(file);
             this.files.push(file);
-            // console.log(this.files);
             return true;
           }else{
             console.log("болшой файл",file.size);
@@ -276,8 +280,8 @@ div.taskpanel-content_workarea(:key="componentKey")
           });
         },
         showDropDownList(){
-          // this.getP rojects({});
-          // this.dropdownShow = !this.dropdownShow;
+          this.getProjects({});
+          this.dropdownShow = !this.dropdownShow;
         },
         async searchProjects(e){
           let value = e.target.value;
