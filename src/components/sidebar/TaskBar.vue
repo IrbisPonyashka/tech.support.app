@@ -234,8 +234,35 @@ div.taskpanel-content_workarea(:key="componentKey")
             console.log("болшой файл",file.size);
             return false;
           }
-          /* let decodeFile = this.dataURLtoFile(`data:${file.type};base64,${encodeFile}`,file.name); 
-          console.log(e.dataTransfer.files); */
+        },
+        showDropDownList(){
+          this.getProjects({});
+          this.dropdownShow = !this.dropdownShow;
+        },
+        async searchProjects(e){
+          let value = e.target.value;
+          let projectParams = {};
+          if(e.target.value!=""){
+            projectParams.FILTER = {
+              "%NAME":value
+            };
+          }
+          let projects = await this.getProjects(projectParams);
+          this.dropdownShow = true;
+          this.fields.projectId = "";
+        },
+        selectProject(project){
+          this.dropdownShow = !this.dropdownShow;
+          this.fields.projectName = project.NAME;
+          this.fields.projectId = project.ID;
+        },
+        preventDefaults(e) {
+          e.preventDefault();
+        },
+        onClickOutside(event) {
+          if (this.dropdownShow==true && this.$refs.dropdown && !this.$refs.dropdown.contains(event.target)) {
+            this.dropdownShow = false;
+          }
         },
         formatBytes(bytes, decimals = 2) { // форматириуем байты в человеческий вид
           if (bytes === 0) return '0 Bytes';
@@ -278,35 +305,6 @@ div.taskpanel-content_workarea(:key="componentKey")
               reject(error);
             };
           });
-        },
-        showDropDownList(){
-          this.getProjects({});
-          this.dropdownShow = !this.dropdownShow;
-        },
-        async searchProjects(e){
-          let value = e.target.value;
-          let projectParams = {};
-          if(e.target.value!=""){
-            projectParams.FILTER = {
-              "%NAME":value
-            };
-          }
-          let projects = await this.getProjects(projectParams);
-          this.dropdownShow = true;
-          this.fields.projectId = "";
-        },
-        selectProject(project){
-          this.dropdownShow = !this.dropdownShow;
-          this.fields.projectName = project.NAME;
-          this.fields.projectId = project.ID;
-        },
-        preventDefaults(e) {
-          e.preventDefault();
-        },
-        onClickOutside(event) {
-          if (this.dropdownShow==true && this.$refs.dropdown && !this.$refs.dropdown.contains(event.target)) {
-            this.dropdownShow = false;
-          }
         },
         generateUniqueId() {
           return '_' + Math.random().toString(36).substr(2, 9);
